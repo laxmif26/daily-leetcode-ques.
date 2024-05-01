@@ -1,0 +1,23 @@
+#include <algorithm> // Required for std::reverse
+#include <string>    // Required for std::string
+
+class Solution {
+public:
+    // This function takes a string and a character.
+    // It reverses the order of characters in the string up to (and including) the first occurrence of the char.
+    // Input: a string 'word' and a character 'ch'
+    // Output: the modified string with the prefix reversed, if the character is found.
+    string reversePrefix(string word, char ch) {
+        // Find the first occurrence of the character 'ch' in 'word'.
+        int index = word.find(ch);
+      
+        // If the character is found (i.e., find() doesn't return string::npos), reverse the substring.
+        if (index != string::npos) {
+            // Reverse from the beginning of 'word' to the character 'ch' (inclusive).
+            reverse(word.begin(), word.begin() + index + 1);
+        }
+      
+        // Return the modified string.
+        return word;
+    }
+};
