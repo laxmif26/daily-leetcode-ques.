@@ -1,0 +1,42 @@
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    // This method finds and returns the relative ranks of athletes based on their scores.
+    vector<string> findRelativeRanks(vector<int>& scores) {
+        int numOfScores = scores.size();
+
+        // Use a vector of pairs to keep track of the scores and their original indices.
+        vector<pair<int, int>> indexedScores;
+        for (int i = 0; i < numOfScores; ++i) {
+            indexedScores.push_back(make_pair(scores[i], i));
+        }
+
+        // Sort the indexed scores in descending order using a custom comparator lambda function.
+        sort(indexedScores.begin(), indexedScores.end(),
+            [](const pair<int, int>& a, const pair<int, int>& b) { return a.first > b.first; });
+
+        // Initialize the answer vector with the same size as the number of scores.
+        vector<string> ranks(numOfScores);
+
+        // Define medals for the top 3 scores.
+        vector<string> medals = {"Gold Medal", "Silver Medal", "Bronze Medal"};
+
+        // Assign ranks to the athletes based on sorted order.
+        for (int i = 0; i < numOfScores; ++i) {
+            if (i < 3) {
+                // Assign medals to the top 3 scores.
+                ranks[indexedScores[i].second] = medals[i];
+            } else {
+                // For others, assign the rank as a string (1-indexed).
+                ranks[indexedScores[i].second] = to_string(i + 1);
+            }
+        }
+
+        return ranks;
+    }
+};
