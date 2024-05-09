@@ -1,0 +1,27 @@
+#include <vector>
+#include <algorithm> // Include algorithm header for std::sort
+
+class Solution {
+public:
+    // Function to calculate the maximum happiness sum using the provided happiness vector and integer k
+    long long maximumHappinessSum(vector<int>& happiness, int k) {
+        // Sort the happiness vector in non-increasing order
+        sort(happiness.rbegin(), happiness.rend());
+      
+        // Initialize a variable to store the accumulated maximum happiness sum
+        long long maxHappinessSum = 0;
+      
+        // Iterate over the first k elements of the sorted vector
+        for (int i = 0, n = happiness.size(); i < k; ++i) {
+            // Calculate the modified happiness value by subtracting the index
+            int modifiedHappiness = happiness[i] - i;
+          
+            // If the modified happiness value is positive, add it to the sum
+            // Otherwise, add zero (do not decrease the sum)
+            maxHappinessSum += std::max(modifiedHappiness, 0);
+        }
+
+        // Return the accumulated maximum happiness sum
+        return maxHappinessSum;
+    }
+};
