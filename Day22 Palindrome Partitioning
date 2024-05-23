@@ -1,0 +1,60 @@
+#include <vector>
+#include <string>
+#include <cstring>
+#include <functional>
+
+class Solution {
+public:
+    std::vector<std::vector<std::string>> partition(std::string s) {
+        int length = s.size();
+      
+        // Create a table to record if the substring s[i..j] is a palindrome.
+        bool palindromeTable[length][length];
+        memset(palindromeTable, true, sizeof(palindromeTable));
+      
+        // Fill the palindromeTable using dynamic programming.
+        for (int i = length - 1; i >= 0; --i) {
+            for (int j = i + 1; j < length; ++j) {
+                // A substring is a palindrome if its outer characters are equal
+                // and if its inner substring is also a palindrome.
+                palindromeTable[i][j] = (s[i] == s[j]) && palindromeTable[i + 1][j - 1];
+            }
+        }
+      
+        // Create a vector to store all palindrome partitioning results.
+        std::vector<std::vector<std::string>> result;
+      
+        // Temporary vector to store current partitioning.
+        std::vector<std::string> tempPartition;
+      
+        // Recursively search for palindrome partitions starting from index 0.
+        std::function<void(int)> depthFirstSearch = [&](int start) {
+            // If we've reached the end of the string, add the current partitioning to results.
+            if (start == length) {
+                result.push_back(tempPartition);
+                return;
+            }
+          
+            // Explore all possible partitionings.
+            for (int end = start; end < length; ++end) {
+                // If the substring starting from 'start' to 'end' is a palindrome
+                if (palindromeTable[start][end]) {
+                    // Push the current palindrome substring to the temporary partitioning.
+                    tempPartition.push_back(s.substr(start, end - start + 1));
+                  
+                    // Move to the next part of the string.
+                    depthFirstSearch(end + 1);
+                  
+                    // Backtrack to explore other partitioning possibilities.
+                    tempPartition.pop_back();
+                }
+            }
+        };
+      
+        // Start the depth-first search from the first character.
+        depthFirstSearch(0);
+      
+        // Return all the palindrome partitioning found.
+        return result;
+    }
+};
